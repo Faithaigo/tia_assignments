@@ -12,7 +12,7 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
-        <form>
+        <form method="POST", action="{{url_for("new_post")}}">
             {{form.hidden_tag()}}
             <div class="mb-3">
                 {{form.title.label(class="form-label", for="title")}}
