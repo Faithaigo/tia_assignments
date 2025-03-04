@@ -1,8 +1,13 @@
 from flask import Flask, render_template
+from models import db
 
 
 
 app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
+
+
+db.init_app(app)
 
 
 @app.route('/')
@@ -62,6 +67,10 @@ def register():
 @app.route('/login', methods=["GET"])
 def login():
     return render_template("login.html")
+
+
+with app.app_context():
+    db.create_all()
 
 if __name__ == '__main__':
     app.run(debug=True)
