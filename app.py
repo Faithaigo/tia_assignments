@@ -13,41 +13,20 @@ app.config["SECRET_KEY"] = os.getenv("CSRF_KEY")
 db.init_app(app)
 
 
+def fetch_all_posts():
+    posts = db.session.execute(db.select(Posts)).scalars()
+    return posts
+
+
 @app.route('/')
 def index():
-    posts = [
-        {
-            id:1,
-            "title":"First Post",
-            "content":"Post content",
-            "author":"John Doe"
-        },
-          {
-            id:2,
-            "title":"First Post",
-            "content":"Post content",
-            "author":"John Doe"
-        }
-    ]
+    posts = fetch_all_posts()
     return render_template("index.html", posts=posts)
 
 
 @app.route('/posts')
 def posts():
-    posts = [
-        {
-            id:1,
-            "title":"First Post",
-            "content":"Post content",
-            "author":"John Doe"
-        },
-          {
-            id:2,
-            "title":"First Post",
-            "content":"Post content",
-            "author":"John Doe"
-        }
-    ]
+    posts = fetch_all_posts()
     return render_template("posts.html", posts=posts)
 
 @app.route('/new_post', methods=["POST","GET"])
