@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock  %}
+
+
+{% block content %}
+    <div class="centered-container">
+        <form>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" aria-describedby="email">
+              <div id="email" class="form-text error">This field is required</div>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" class="form-control" id="password" aria-describedby="password">
+              <div id="password" class="form-text error">This field is required</div>
+            </div>
+            <div class="mb-3">
+                <div id="authorError" class="form-text">Don't have an account? <a href="{{url_for('register')}}">Register</a></div>
+              </div>
+            <button type="submit" class="btn btn-primary" style="width:100%">Login</button>
+          </form>
+    </div>
+{% endblock  %}

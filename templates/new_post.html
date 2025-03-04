@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %} New Post{% endblock  %}
+
+
+{% block content %}
+    <div class="centered-container">
+        <form>
+            <div class="mb-3">
+              <label for="title" class="form-label">Title</label>
+              <input type="text" class="form-control" id="title" aria-describedby="titleError">
+              <div id="titleError" class="form-text error">This field is required</div>
+            </div>
+            <div class="mb-3">
+              <label for="content" class="form-label">Content</label>
+              <textarea  class="form-control" id="container" aria-describedby="contentError"></textarea>
+                <div id="titleError" class="form-text error">This field is required</div>
+            </div>
+            <div class="mb-3">
+                <label for="author" class="form-label">Author</label>
+                <input type="text" class="form-control" id="author" aria-describedby="authorError">
+                <div id="authorError" class="form-text error">This field is required</div>
+              </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+    </div>
+{% endblock  %}
