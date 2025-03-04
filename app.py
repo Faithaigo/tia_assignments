@@ -1,6 +1,7 @@
 import os
-from flask import Flask, render_template
-from models import db
+from flask import Flask, render_template, request, flash, redirect, url_for
+from models import db,Posts
+from forms import PostForm
 
 
 
@@ -51,6 +52,13 @@ def posts():
 
 @app.route('/new_post', methods=["POST","GET"])
 def new_post():
+    form = PostForm()
+    if request.method == "POST":
+        new_post = Posts(title=form.title.data, content=form.content.data, author=form.author.data)
+        db.session.add(new_post)
+        db.session.commit()
+        flash("Post added successfully")
+        return redirect(url_for("index"))
     return render_template("new_post.html")
 
 @app.route('/delete_post', methods=["PUT"])
