@@ -1,6 +1,6 @@
 import os
 from flask import Flask, render_template, request, flash, redirect, url_for
-from models import db,Posts
+from models import db,Posts, User
 from forms import PostForm,RegisterForm
 
 
@@ -56,9 +56,17 @@ def delete_post():
 def edit_post():
     pass
 
-@app.route('/register', methods=["GET"])
+@app.route('/register', methods=["GET","POST"])
 def register():
     form = RegisterForm()
+    if request.method == "POST":
+        if form.validate_on_submit():
+            new_user = User(full_name=form.full_name.data, email=form.email.data, password=form.password.data)
+            db.session.add(new_user)
+            db.session.commit()
+            flash("User registered successfully","success")
+            return redirect(url_for("login"))
+        
     return render_template("register.html", form=form)
 
 
