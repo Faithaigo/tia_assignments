@@ -41,6 +41,13 @@ def new_post():
             return redirect(url_for("index"))
     return render_template("new_post.html", form=form)
 
+
+@app.route('/post/<int:post_id>')
+def single_post(post_id):
+    post = db.get_or_404(Posts,post_id)
+    return render_template("post.html", post=post)
+    
+
 @app.route('/delete_post', methods=["PUT"])
 def delete_post():
     pass
