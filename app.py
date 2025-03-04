@@ -54,12 +54,13 @@ def posts():
 def new_post():
     form = PostForm()
     if request.method == "POST":
-        new_post = Posts(title=form.title.data, content=form.content.data, author=form.author.data)
-        db.session.add(new_post)
-        db.session.commit()
-        flash("Post added successfully")
-        return redirect(url_for("index"))
-    return render_template("new_post.html")
+        if form.validate_on_submit():
+            new_post = Posts(title=form.title.data, content=form.content.data, author=form.author.data)
+            db.session.add(new_post)
+            db.session.commit()
+            flash("Post added successfully","success")
+            return redirect(url_for("index"))
+    return render_template("new_post.html", form=form)
 
 @app.route('/delete_post', methods=["PUT"])
 def delete_post():
