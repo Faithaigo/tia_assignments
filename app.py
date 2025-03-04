@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template
 from models import db
 
@@ -5,6 +6,7 @@ from models import db
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
+app.config["SECRET_KEY"] = os.getenv("CSRF_KEY")
 
 
 db.init_app(app)
