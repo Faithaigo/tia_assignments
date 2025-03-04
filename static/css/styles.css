@@ -1,0 +1,13 @@
+.main{
+   margin-top: 4rem;
+}
+
+.centered-container{
+    width: 90%;
+    max-width: 650px;
+    margin: auto;
+}
+
+.error{
+    color: red;
+}
