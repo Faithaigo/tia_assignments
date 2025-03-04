@@ -5,23 +5,37 @@
 
 {% block content %}
     <div class="centered-container">
+        {% with messages= get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message  in messages  %}
+                    <div class="alert alert-{{category}}">{{message}}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         <form>
+            {{form.hidden_tag()}}
             <div class="mb-3">
-              <label for="title" class="form-label">Title</label>
-              <input type="text" class="form-control" id="title" aria-describedby="titleError">
-              <div id="titleError" class="form-text error">This field is required</div>
+                {{form.title.label(class="form-label", for="title")}}
+                {{form.title(class="form-control", id="title", aria_describedby="titleError")}}
+                {% for error in form.title.errors %}
+                    <div id="titleError" class="form-text error">{{error}}</div>
+                {% endfor %}
+            </div> 
+            <div class="mb-3">
+                {{form.content.label(class="form-label", for="content")}}
+                {{form.content(class="form-control", id="content", aria_describedby="contentError")}}
+                {% for error in form.content.errors %}
+                    <div id="contentError" class="form-text error">{{error}}</div>
+                {% endfor %}
             </div>
             <div class="mb-3">
-              <label for="content" class="form-label">Content</label>
-              <textarea  class="form-control" id="container" aria-describedby="contentError"></textarea>
-                <div id="titleError" class="form-text error">This field is required</div>
-            </div>
-            <div class="mb-3">
-                <label for="author" class="form-label">Author</label>
-                <input type="text" class="form-control" id="author" aria-describedby="authorError">
-                <div id="authorError" class="form-text error">This field is required</div>
+                {{form.author.label(class="form-label", for="author")}}
+                {{form.author(class="form-control", id="author", aria_describedby="authorError")}}
+                {% for error in form.author.errors %}
+                    <div id="authorError" class="form-text error">{{error}}</div>
+                {% endfor %}
               </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+              {{form.submit(class="btn btn-primary")}}
           </form>
     </div>
 {% endblock  %}
