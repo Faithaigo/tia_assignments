@@ -48,11 +48,11 @@ def single_post(post_id):
     return render_template("post.html", post=post)
     
 
-@app.route('/delete_post', methods=["PUT"])
+@app.route('/delete_post', methods=["DELETE"])
 def delete_post():
     pass
 
-@app.route('/edit_post', methods=["DELETE"])
+@app.route('/edit_post', methods=["PUT"])
 def edit_post():
     pass
 
