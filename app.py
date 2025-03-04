@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, request, flash, redirect, url_for
 from models import db,Posts
-from forms import PostForm
+from forms import PostForm,RegisterForm
 
 
 
@@ -58,7 +58,8 @@ def edit_post():
 
 @app.route('/register', methods=["GET"])
 def register():
-    return render_template("register.html")
+    form = RegisterForm()
+    return render_template("register.html", form=form)
 
 
 @app.route('/login', methods=["GET"])
