@@ -5,21 +5,33 @@
 
 {% block content %}
     <div class="centered-container">
-        <form>
+        {% with messages= get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message  in messages  %}
+                    <div class="alert {% if category == 'error' %}alert-danger{% else %}{{category}}{% endif %}">{{message}}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <form method="POST", action="{{url_for("login")}}">
+            {{form.hidden_tag()}}
             <div class="mb-3">
-              <label for="email" class="form-label">Email</label>
-              <input type="email" class="form-control" id="email" aria-describedby="email">
-              <div id="email" class="form-text error">This field is required</div>
+                {{form.email.label(class="form-label", for="email")}}
+                {{form.email(class="form-control", id="email", aria_describedby="emailError")}}
+                {% for error in form.email.errors %}
+                    <div id="emailError" class="form-text error">{{error}}</div>
+                {% endfor %}
             </div>
             <div class="mb-3">
-              <label for="password" class="form-label">Password</label>
-              <input type="password" class="form-control" id="password" aria-describedby="password">
-              <div id="password" class="form-text error">This field is required</div>
+                {{form.password.label(class="form-label", for="password")}}
+                {{form.password(class="form-control", id="password", aria_describedby="passwordError")}}
+                {% for error in form.password.errors %}
+                    <div id="passwordError" class="form-text error">{{error}}</div>
+                {% endfor %}
             </div>
             <div class="mb-3">
-                <div id="authorError" class="form-text">Don't have an account? <a href="{{url_for('register')}}">Register</a></div>
-              </div>
-            <button type="submit" class="btn btn-primary" style="width:100%">Login</button>
-          </form>
+                <div  class="form-text">Don't have an account? <a href="{{url_for('register')}}">Register</a></div>
+            </div>
+            {{form.submit(class="btn btn-primary", style="width:100%;")}}
+        </form>
     </div>
 {% endblock  %}
