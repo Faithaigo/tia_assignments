@@ -9,16 +9,28 @@
           <li class="nav-item">
             <a class="nav-link {% if request.path == url_for("index") %}active{% endif %}" aria-current="page" href="{{url_for('index')}}">Home</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link {% if request.path == url_for("posts") %}active{% endif %}" href="{{url_for('posts')}}">Posts</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link {% if request.path == url_for("new_post") %}active{% endif %}" href="{{url_for('new_post')}}">New Post</a>
-          </li>
+          {% if current_user.is_authenticated  %}
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == url_for("posts") %}active{% endif %}" href="{{url_for('posts')}}">Posts</a>
+            </li>
+          {% endif %}
+          
+          {% if current_user.is_authenticated  %}
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == url_for("new_post") %}active{% endif %}" href="{{url_for('new_post')}}">New Post</a>
+            </li>
+          {% endif %}
+         
         </ul>
-        <div class="d-flex">
-          <a href="{{url_for('login')}}" class="btn btn-outline-success">Login</a>
-        </div>
+        {% if current_user.is_authenticated %}
+          <div class="d-flex">
+            <a href="{{url_for('logout')}}" class="btn btn-outline-success">Logout</a>
+          </div>
+        {% else %}
+          <div class="d-flex">
+            <a href="{{url_for('login')}}" class="btn btn-outline-success">Login</a>
+          </div>
+        {% endif %}
       </div>
     </div>
   </nav>
