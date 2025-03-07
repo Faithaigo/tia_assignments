@@ -1,5 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from flask_login import UserMixin
+
 
 class Base(DeclarativeBase):
   pass
@@ -12,7 +14,7 @@ class Posts(db.Model):
     content:Mapped[str]
     author:Mapped[str]
     
-class User(db.Model):
+class User(UserMixin,db.Model):
     id:Mapped[int] = mapped_column(primary_key=True)
     full_name:Mapped[str]
     email:Mapped[str] = mapped_column(unique=True)
