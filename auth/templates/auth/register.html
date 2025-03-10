@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock  %}
+
+
+{% block content %}
+<div class="centered-container">
+    {% with messages= get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message  in messages  %}
+                <div class="alert alert-{{category}}">{{message}}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <form method="POST", action="{{url_for("auth.register")}}">
+        {{form.hidden_tag()}}
+        <div class="mb-3">
+            {{form.full_name.label(class="form-label", for="full_name")}}
+            {{form.full_name(class="form-control", id="full_name", aria_describedby="nameError")}}
+            {% for error in form.full_name.errors %}
+                <div id="nameError" class="form-text error">{{error}}</div>
+            {% endfor %}
+        </div> 
+        <div class="mb-3">
+            {{form.email.label(class="form-label", for="email")}}
+            {{form.email(class="form-control", id="email", aria_describedby="emailError")}}
+            {% for error in form.email.errors %}
+                <div id="emailError" class="form-text error">{{error}}</div>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{form.password.label(class="form-label", for="password")}}
+            {{form.password(class="form-control", id="password", aria_describedby="passwordError")}}
+            {% for error in form.password.errors %}
+                <div id="passwordError" class="form-text error">{{error}}</div>
+            {% endfor %}
+          </div>
+          <div class="mb-3">
+            {{form.confirm_password.label(class="form-label", for="confirm_password")}}
+            {{form.confirm_password(class="form-control", id="confirm_password", aria_describedby="confirmPasswordError")}}
+            {% for error in form.confirm_password.errors %}
+                <div id="confirmPasswordError" class="form-text error">{{error}}</div>
+            {% endfor %}
+          </div>
+          {{form.submit(class="btn btn-primary", style="width:100%;")}}
+      </form>
+</div>
+{% endblock  %}
