@@ -1,0 +1,20 @@
+.main{
+   margin-top: 4rem;
+}
+
+.centered-container{
+    width: 90%;
+    max-width: 650px;
+    margin: auto;
+}
+
+.error{
+    color: red;
+}
+
+.short-text {
+    height: 4.5em;  
+    overflow: hidden;
+    position: relative;
+    line-height: 1.5em;
+}
