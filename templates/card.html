@@ -1,0 +1,17 @@
+<a href="{{url_for("posts.single_post", post_id=post.id)}}" style="text-decoration:none; color:black;">
+    <div class="card" style="width: 18rem;">
+        <img src="{{url_for('static', filename='images/blog.jpg')}}" class="card-img-top" alt="blog-image">
+        <div class="card-body">
+          <h5 class="card-title">{{post.title}}</h5>
+          <p class="card-text short-text" >{{post.content}}</p>
+          <p class="card-text"><small class="text-body-secondary">{{post.author}}</small></p>
+          {% if current_user.is_authenticated %}
+            <div>
+              <a href="{{url_for('posts.edit_post', post_id=post.id)}}" class="btn btn-outline-info">Edit</a>
+              <a href="{{url_for('posts.delete_post', post_id=post.id)}}" class="btn btn-outline-danger">Delete</a>
+            </div>
+          {% endif %}
+         
+        </div>
+    </div>
+</a>
