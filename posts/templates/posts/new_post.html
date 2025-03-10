@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %} New Post{% endblock  %}
+
+
+{% block content %}
+    <div class="centered-container">
+        {% with messages= get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message  in messages  %}
+                    <div class="alert alert-{{category}}">{{message}}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <form method="POST", action="{{url_for("posts.new_post")}}">
+            {{form.hidden_tag()}}
+            <div class="mb-3">
+                {{form.title.label(class="form-label", for="title")}}
+                {{form.title(class="form-control", id="title", aria_describedby="titleError")}}
+                {% for error in form.title.errors %}
+                    <div id="titleError" class="form-text error">{{error}}</div>
+                {% endfor %}
+            </div> 
+            <div class="mb-3">
+                {{form.content.label(class="form-label", for="content")}}
+                {{form.content(class="form-control", id="content", aria_describedby="contentError")}}
+                {% for error in form.content.errors %}
+                    <div id="contentError" class="form-text error">{{error}}</div>
+                {% endfor %}
+            </div>
+            <div class="mb-3">
+                {{form.author.label(class="form-label", for="author")}}
+                {{form.author(class="form-control", id="author", aria_describedby="authorError")}}
+                {% for error in form.author.errors %}
+                    <div id="authorError" class="form-text error">{{error}}</div>
+                {% endfor %}
+              </div>
+              {{form.submit(class="btn btn-primary")}}
+          </form>
+    </div>
+{% endblock  %}
