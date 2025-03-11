@@ -40,4 +40,4 @@ def login():
 @auth_blueprint.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for("index"))
+    return redirect(url_for("posts.index"))
