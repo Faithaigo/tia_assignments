@@ -7,9 +7,16 @@
     <div class="centered-container">
         {% with messages= get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                {% for category, message  in messages  %}
-                    <div class="alert {% if category == 'error' %}alert-danger{% else %}{{category}}{% endif %}">{{message}}</div>
-                {% endfor %}
+                <div id="flash-messages">
+                    {% for category, message  in messages  %}
+                        <div class="alert {% if category == 'error' %}alert-danger{% else %}{{category}}{% endif %}">{{message}}</div>
+                    {% endfor %}
+                    <script>
+                        setTimeout(function() {
+                            $(".alert").fadeOut("slow");
+                        }, 3000);  // Disappear after 3 seconds
+                    </script>
+                </div>
             {% endif %}
         {% endwith %}
         <form method="POST", action="{{url_for("auth.login")}}">
