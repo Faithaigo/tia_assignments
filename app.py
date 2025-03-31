@@ -14,10 +14,24 @@ from logging import FileHandler
 
 load_dotenv()
 
+dictConfig({
+    'version': 1,
+    'formatters': {'default': {
+        'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
+    }},
+    'handlers': {'wsgi': {
+        'class': 'logging.StreamHandler',
+        'stream': 'ext://flask.logging.wsgi_errors_stream',
+        'formatter': 'default'
+    }},
+    'root': {
+        'level': 'ERROR',
+        'handlers': ['wsgi']
+    }
+})
+
 
 app = Flask(__name__)
-
-app.logger.setLevel(logging.ERROR)
 
 app.secret_key = os.getenv("LOGIN_SECRET_KEY")
 
