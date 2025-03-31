@@ -11,4 +11,5 @@ class InvalidAPIUsage(Exception):
     def to_dict(self):
         rv = dict(self.payload or ())
         rv['message'] = self.message
+        rv['status'] = self.status_code
         return rv
