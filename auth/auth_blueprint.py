@@ -1,9 +1,13 @@
+import logging
 from flask import Blueprint,jsonify
 from flask_login import login_user, logout_user
 from auth.models import User
 from extensions import db,bcrypt
 from flask_restful import Resource, reqparse, Api
 from customErrors import InvalidAPIUsage
+
+
+logger = logging.getLogger(__name__)
 auth_blueprint = Blueprint('auth', __name__, url_prefix="/auth")
 
 api = Api(auth_blueprint)
@@ -20,25 +24,37 @@ def bad_request(e):
 
 class RegisterUser(Resource):
     def post(self):
-        args = parser.parse_args()
-        if not args['full_name']:
-            raise InvalidAPIUsage("Please provide a full name")
-        hashed_password = bcrypt.generate_password_hash(args['password']).decode('utf-8')
-        new_user = User(full_name=args['full_name'], email=args['email'], password=hashed_password)
-        db.session.add(new_user)
-        db.session.commit()
-        return {"message":"User registered successfully"}, 201
+        try:
+            args = parser.parse_args()
+            if not args['full_name']:
+                raise InvalidAPIUsage("Please provide a full name")
+            hashed_password = bcrypt.generate_password_hash(args['password']).decode('utf-8')
+            new_user = User(full_name=args['full_name'], email=args['email'], password=hashed_password)
+            db.session.add(new_user)
+            db.session.commit()
+            return {"message":"User registered successfully"}, 201
+        except Exception as e:
+            logger.error('Error occurred: %s', str(e))
+            raise
 
 class Login(Resource):
     def post(self):
-        args = parser.parse_args()
-        user = User.query.filter_by(email=args['email']).first()
-        is_password = bcrypt.check_password_hash(user.password, args['password'])
-        if user and is_password:
-            login_user(user)
-            return {"message":"Logged in successfully"}, 200
-        else:
-            return {"message":"Wrong username or password"}, 401
+        try:
+            args = parser.parse_args()
+            if not args['email']:
+                raise InvalidAPIUsage("Please provide an email address")
+            user = User.query.filter_by(email=args['email']).first()
+            if not user:
+                raise InvalidAPIUsage("User does not exist")
+            is_password = bcrypt.check_password_hash(user.password, args['password'])
+            if user and is_password:
+                login_user(user)
+                return {"message":"Logged in successfully"}, 200
+            else:
+                return {"message":"Wrong username or password"}, 401
+        except Exception as e:
+            logger.error('Error occurred: %s', str(e))
+            raise
 
 class Logout(Resource):
     def post(self):

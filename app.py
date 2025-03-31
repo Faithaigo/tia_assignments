@@ -1,4 +1,5 @@
 import os
+import logging
 from flask import Flask, jsonify
 from flask_login import LoginManager
 from extensions import db, bcrypt
@@ -6,6 +7,8 @@ from dotenv import load_dotenv
 from auth.auth_blueprint import auth_blueprint
 from auth.models import User
 from posts.posts_blueprint import posts_blueprint
+from logging.config import dictConfig
+from logging import FileHandler
 
 
 
@@ -13,6 +16,8 @@ load_dotenv()
 
 
 app = Flask(__name__)
+
+app.logger.setLevel(logging.ERROR)
 
 app.secret_key = os.getenv("LOGIN_SECRET_KEY")
 
