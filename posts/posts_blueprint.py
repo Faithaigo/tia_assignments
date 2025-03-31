@@ -1,6 +1,8 @@
-from flask import Blueprint
+from flask import Blueprint, jsonify
 from flask_login import login_required, current_user
 from flask_restful import Api, Resource, reqparse
+
+from customErrors import InvalidAPIUsage
 from posts.models import Posts
 from extensions import db
 
@@ -13,6 +15,14 @@ parser.add_argument('title', type=str, help="Title of post")
 parser.add_argument('content', type=str, help="Post content")
 parser.add_argument('author', type=str, help="Post author")
 
+
+@posts_blueprint.errorhandler(InvalidAPIUsage)
+def bad_request(e):
+    return jsonify(e.to_dict()), e.status_code
+
+@posts_blueprint.errorhandler(InvalidAPIUsage)
+def unauthorized_access(e):
+    return jsonify(e.to_dict()), e.status_code
 
 class BlogPosts(Resource):
     @login_required
@@ -29,8 +39,10 @@ class BlogPosts(Resource):
     @login_required
     def post(self):
         if not current_user:
-            return {"message": "You are not authorized"}, 403
+            raise InvalidAPIUsage('You are not authorized', status_code=401)
         arg = parser.parse_args()
+        if not arg["title"]:
+            raise InvalidAPIUsage('Please provide a title')
         added_post = Posts(title=arg["title"], content=arg["content"], author=arg["author"])
         db.session.add(added_post)
         db.session.commit()
@@ -54,3 +66,6 @@ class BlogPost(Resource):
 
 api.add_resource(BlogPosts, '/posts')
 api.add_resource(BlogPost, '/post/<int:post_id>')
+
+posts_blueprint.register_error_handler(400, bad_request)
+posts_blueprint.register_error_handler(401, unauthorized_access)
