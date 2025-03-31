@@ -1,9 +1,9 @@
-from flask import Blueprint
+from flask import Blueprint,jsonify
 from flask_login import login_user, logout_user
 from auth.models import User
 from extensions import db,bcrypt
 from flask_restful import Resource, reqparse, Api
-
+from customErrors import InvalidAPIUsage
 auth_blueprint = Blueprint('auth', __name__, url_prefix="/auth")
 
 api = Api(auth_blueprint)
@@ -14,9 +14,15 @@ parser.add_argument('full_name', type=str)
 parser.add_argument('email', type=str)
 parser.add_argument('password', type=str)
 
+@auth_blueprint.errorhandler(InvalidAPIUsage)
+def bad_request(e):
+    return jsonify(e.to_dict()), e.status_code
+
 class RegisterUser(Resource):
     def post(self):
         args = parser.parse_args()
+        if not args['full_name']:
+            raise InvalidAPIUsage("Please provide a full name")
         hashed_password = bcrypt.generate_password_hash(args['password']).decode('utf-8')
         new_user = User(full_name=args['full_name'], email=args['email'], password=hashed_password)
         db.session.add(new_user)
@@ -42,3 +48,5 @@ class Logout(Resource):
 api.add_resource(RegisterUser, '/register')
 api.add_resource(Login,'/login')
 api.add_resource(Logout,'/logout')
+
+auth_blueprint.register_error_handler(400, bad_request)
