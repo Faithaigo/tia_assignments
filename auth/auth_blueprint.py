@@ -7,8 +7,10 @@ from flask_restful import Resource, reqparse, Api
 from customErrors import InvalidAPIUsage
 
 
-logger = logging.getLogger(__name__)
+
 auth_blueprint = Blueprint('auth', __name__, url_prefix="/auth")
+
+logger = logging.getLogger(__name__)
 
 api = Api(auth_blueprint)
 
